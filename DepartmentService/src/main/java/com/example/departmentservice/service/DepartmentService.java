@@ -61,6 +61,7 @@ public class DepartmentService {
         if (isDepartmentUsedByEmployee(department)) {
             throw new IllegalStateException("Department is associated with employees and cannot be deleted");
         }else {
+            System.out.println("Deleted");
             departmentRepo.deleteById(id);
         }
     }
