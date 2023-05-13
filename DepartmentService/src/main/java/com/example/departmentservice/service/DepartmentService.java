@@ -55,9 +55,7 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Long id) {
-        System.out.println("Id found " + id);
         Department department = getDepById(id);
-        System.out.println("Department found " + department);
         if (isDepartmentUsedByEmployee(department)) {
             throw new IllegalStateException("Department is associated with employees and cannot be deleted");
         }else {
