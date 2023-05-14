@@ -2,6 +2,7 @@ package com.example.productsservice.controller;
 
 import com.example.productsservice.dto.ProductDto;
 import com.example.productsservice.service.ProductService;
+import com.example.productsservice.utility.PaginationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,9 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<?>> getProducts(){
-        List<ProductDto> products = productService.getProducts();
+    public ResponseEntity<PaginationData> getProducts(@RequestParam(value ="page", defaultValue = "0", required = false) int page,
+                                                      @RequestParam(value ="pageSize", defaultValue = "10", required = false) int pageSize){
+        PaginationData products = productService.getProducts(page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 

@@ -5,7 +5,11 @@ import com.example.employeeservice.dto.DepartmentDto;
 import com.example.employeeservice.dto.EmployeeDto;
 import com.example.employeeservice.entity.Employee;
 import com.example.employeeservice.repository.EmployeeRepo;
+import com.example.employeeservice.utility.PaginationData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -39,9 +43,18 @@ public class EmployeeService {
         return Employee.toData(emp);
     }
 
-    public List<EmployeeDto> getEmployees() {
-        List<Employee> employees = employeeRepo.findAll();
-        return employees.stream().map((employee -> Employee.toData(employee))).collect(Collectors.toList());
+    public PaginationData getEmployees(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page employee = employeeRepo.findAll(pageable);
+        List<Employee> employees = employee.getContent();
+        List<EmployeeDto> listOfEmployees = employees.stream().map((e -> Employee.toData(e))).collect(Collectors.toList());;
+
+        PaginationData content = new PaginationData();
+        content.setContent(listOfEmployees);
+        content.setPageNo(employee.getNumber() + 1);
+        content.setPageSize(employee.getSize());
+        content.setTotalElements(employee.getTotalElements());
+        return content;
     }
 
     public EmployeeDto getEmployee(String name) {

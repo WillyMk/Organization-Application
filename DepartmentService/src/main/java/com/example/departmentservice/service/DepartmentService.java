@@ -4,7 +4,11 @@ import com.example.departmentservice.dto.DepartmentDto;
 import com.example.departmentservice.dto.EmployeeDto;
 import com.example.departmentservice.entity.Department;
 import com.example.departmentservice.repository.DepartmentRepo;
+import com.example.departmentservice.utility.PaginationData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -32,9 +36,19 @@ public class DepartmentService {
         return Department.toData(dep1);
     }
 
-    public List<DepartmentDto> getDepartments() {
-        List<Department> departments = departmentRepo.findAll();
-        return departments.stream().map((department) -> Department.toData(department)).collect(Collectors.toList());
+    public PaginationData getDepartments(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page departments = departmentRepo.findAll(pageable);
+        List<Department> listOfDepartments = departments.getContent();
+        List<DepartmentDto> departmentDtoList = listOfDepartments.stream().map(d -> Department.toData(d)).collect(Collectors.toList());
+
+        PaginationData content = new PaginationData();
+        content.setContent(departmentDtoList);
+        content.setPageNo(departments.getNumber() + 1);
+        content.setPageSize(departments.getSize());
+        content.setTotalElements(departments.getTotalElements());
+        return content;
+
     }
 
     public DepartmentDto getByCode(String code) {

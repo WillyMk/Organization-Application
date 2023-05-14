@@ -3,6 +3,7 @@ package com.example.departmentservice.controller;
 import com.example.departmentservice.dto.DepartmentDto;
 import com.example.departmentservice.entity.Department;
 import com.example.departmentservice.service.DepartmentService;
+import com.example.departmentservice.utility.PaginationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,10 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> getDepartments(){
-        List<DepartmentDto> departments = departmentService.getDepartments();
-        return new ResponseEntity<List<?>>(departments, HttpStatus.OK);
+    public ResponseEntity<PaginationData> getDepartments(@RequestParam(value ="page", defaultValue = "0", required = false) int page,
+                                                         @RequestParam(value ="pageSize", defaultValue = "10", required = false) int pageSize){
+        PaginationData departments = departmentService.getDepartments(page, pageSize);
+        return ResponseEntity.status(HttpStatus.OK).body(departments);
     }
 
     @GetMapping("{code}")

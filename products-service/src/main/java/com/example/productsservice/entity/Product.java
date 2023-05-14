@@ -1,10 +1,7 @@
 package com.example.productsservice.entity;
 
 import com.example.productsservice.dto.ProductDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +16,10 @@ public class Product {
     private String name;
     private String price;
     private String description;
+
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
 
     public static ProductDto toDto(Product product) {
         ProductDto productDto = new ProductDto();

@@ -3,6 +3,7 @@ package com.example.employeeservice.controller;
 import com.example.employeeservice.dto.APIResponseDto;
 import com.example.employeeservice.dto.EmployeeDto;
 import com.example.employeeservice.service.EmployeeService;
+import com.example.employeeservice.utility.PaginationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,10 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> getEmployees() {
-        List<EmployeeDto> employees = employeeService.getEmployees();
-        return new ResponseEntity<List<?>>(employees, HttpStatus.OK);
+    public ResponseEntity<PaginationData> getEmployees(@RequestParam(value ="page", defaultValue = "0", required = false) int page,
+                                                       @RequestParam(value ="pageSize", defaultValue = "10", required = false) int pageSize) {
+        PaginationData employees = employeeService.getEmployees(page, pageSize);
+        return ResponseEntity.status(HttpStatus.OK).body(employees);
     }
     
 
