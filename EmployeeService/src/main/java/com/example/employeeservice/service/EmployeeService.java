@@ -81,8 +81,7 @@ public class EmployeeService {
                     .queryParam("departmentName", e.getDepartmentName())
                     .build()
                     .toUri();
-
-            DepartmentDto departmentDto = webClient.get()
+            var departmentDto = webClient.get()
                     .uri("http://localhost:8080/api/department/" + e.getDepartmentCode())
                     .retrieve()
                     .bodyToMono(DepartmentDto.class)
