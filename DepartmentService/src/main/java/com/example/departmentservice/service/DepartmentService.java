@@ -1,7 +1,6 @@
 package com.example.departmentservice.service;
 
 import com.example.departmentservice.dto.DepartmentDto;
-import com.example.departmentservice.dto.EmployeeDto;
 import com.example.departmentservice.entity.Department;
 import com.example.departmentservice.repository.DepartmentRepo;
 import com.example.departmentservice.utility.PaginationData;
@@ -20,9 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DepartmentService {
-
     private final DepartmentRepo departmentRepo;
-
     public final WebClient webClient;
 
     public DepartmentDto saveDepartment(DepartmentDto department) {
@@ -38,9 +35,9 @@ public class DepartmentService {
 
     public PaginationData getDepartments(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page departments = departmentRepo.findAll(pageable);
+        Page<Department> departments = departmentRepo.findAll(pageable);
         List<Department> listOfDepartments = departments.getContent();
-        List<DepartmentDto> departmentDtoList = listOfDepartments.stream().map(d -> Department.toData(d)).collect(Collectors.toList());
+        List<DepartmentDto> departmentDtoList = listOfDepartments.stream().map(Department::toData).collect(Collectors.toList());
 
         PaginationData content = new PaginationData();
         content.setContent(departmentDtoList);
@@ -50,7 +47,6 @@ public class DepartmentService {
         return content;
 
     }
-
     public DepartmentDto getByCode(String code) {
         Department department = departmentRepo.findByDepartmentCode(code);
         if (department == null) {
@@ -59,7 +55,6 @@ public class DepartmentService {
             return Department.toData(department);
         }
     }
-
     public Department getDepById(Long id) {
         Optional<Department> department = departmentRepo.findById(id);
         if (department.isPresent()) {
@@ -67,7 +62,6 @@ public class DepartmentService {
         }
         throw new RuntimeException("No department found for id " + id);
     }
-
     public void deleteDepartment(Long id) {
         Department department = getDepById(id);
         if (isDepartmentUsedByEmployee(department)) {
@@ -77,13 +71,12 @@ public class DepartmentService {
             departmentRepo.deleteById(id);
         }
     }
-
     private boolean isDepartmentUsedByEmployee(Department department) {
         // Use WebClient to check if any employees are associated with the department
         Mono<Boolean> result = webClient.get()
                 .uri("http://localhost:8081/api/employee/code/" + department.getDepartmentCode())
                 .retrieve()
                 .bodyToMono(Boolean.class);
-        return result.block();
+        return Boolean.TRUE.equals(result.block());
     }
 }

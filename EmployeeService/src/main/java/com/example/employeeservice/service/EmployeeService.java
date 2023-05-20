@@ -12,7 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,9 +47,9 @@ public class EmployeeService {
 
     public PaginationData getEmployees(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page employee = employeeRepo.findAll(pageable);
+        Page<Employee> employee = employeeRepo.findAll(pageable);
         List<Employee> employees = employee.getContent();
-        List<EmployeeDto> listOfEmployees = employees.stream().map((e -> Employee.toData(e))).collect(Collectors.toList());;
+        List<EmployeeDto> listOfEmployees = employees.stream().map((Employee::toData)).collect(Collectors.toList());;
 
         PaginationData content = new PaginationData();
         content.setContent(listOfEmployees);
@@ -73,6 +75,13 @@ public class EmployeeService {
             if(e.getDepartmentCode() == null) {
                 throw new RuntimeException("Body has a null department value");
             }
+            URI uri = UriComponentsBuilder
+                    .fromUriString("http://localhost:8080/api/department")
+                    .queryParam("departmentCode", e.getDepartmentCode())
+                    .queryParam("departmentName", e.getDepartmentName())
+                    .build()
+                    .toUri();
+
             DepartmentDto departmentDto = webClient.get()
                     .uri("http://localhost:8080/api/department/" + e.getDepartmentCode())
                     .retrieve()
@@ -89,10 +98,6 @@ public class EmployeeService {
     public Boolean getEmployeeByCode(String code) {
         List<Employee> employees = employeeRepo.findEmployeeByDepartmentCode(code);
         System.out.println("Employees " + employees);
-        if(employees.isEmpty()) {
-            return false;
-        }else{
-            return true;
-        }
+        return !employees.isEmpty();
     }
 }

@@ -24,7 +24,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginationData> getEmployees(@RequestParam(value ="page", defaultValue = "0", required = false) int page,
+    public ResponseEntity<PaginationData> getEmployees(@RequestParam(value ="page", defaultValue = "1", required = false) int page,
                                                        @RequestParam(value ="pageSize", defaultValue = "10", required = false) int pageSize) {
         PaginationData employees = employeeService.getEmployees(page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(employees);

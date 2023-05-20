@@ -11,11 +11,15 @@
         <module name="products-service" />
         <module name="OrderService" />
         <module name="EmployeeService" />
+        <module name="gateway" />
+        <module name="discovery" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="DepartmentService" target="17" />
+      <module name="discovery" target="17" />
       <module name="EmployeeService" target="17" />
+      <module name="gateway" target="17" />
       <module name="OrderService" target="17" />
       <module name="products-service" target="17" />
     </bytecodeTargetLevel>
@@ -25,6 +29,8 @@
       <module name="DepartmentService" options="-parameters" />
       <module name="EmployeeService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
+      <module name="discovery" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="products-service" options="-parameters" />
     </option>
   </component>

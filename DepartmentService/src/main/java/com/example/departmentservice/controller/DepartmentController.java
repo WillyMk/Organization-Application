@@ -25,7 +25,7 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginationData> getDepartments(@RequestParam(value ="page", defaultValue = "0", required = false) int page,
+    public ResponseEntity<PaginationData> getDepartments(@RequestParam(value ="page", defaultValue = "1", required = false) int page,
                                                          @RequestParam(value ="pageSize", defaultValue = "10", required = false) int pageSize){
         PaginationData departments = departmentService.getDepartments(page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(departments);

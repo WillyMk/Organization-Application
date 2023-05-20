@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/EmployeeService/EmployeeService.iml" filepath="$PROJECT_DIR$/EmployeeService/EmployeeService.iml" />
       <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/OrganizationApplication.iml" filepath="$PROJECT_DIR$/.idea/OrganizationApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/discovery/discovery.iml" filepath="$PROJECT_DIR$/discovery/discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/products-service/products-service.iml" filepath="$PROJECT_DIR$/products-service/products-service.iml" />
     </modules>
   </component>
